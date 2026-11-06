@@ -107,7 +107,8 @@ def collect(
             artifacts = api(f"repos/{repo}/actions/runs/{run_id}/artifacts?per_page=100", gh_bin).get("artifacts")
             if not isinstance(artifacts, list):
                 raise EvidenceError("Missing GitHub artifact list")
-            expected_prefix = f"{engine}-audit-{run_id}-"
+            artifact_stem = specification.get("artifact_prefix", f"{engine}-audit")
+            expected_prefix = f"{artifact_stem}-{run_id}-"
             matched = [
                 a for a in artifacts
                 if isinstance(a.get("name"), str)
