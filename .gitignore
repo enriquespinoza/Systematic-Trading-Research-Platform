@@ -1,0 +1,7 @@
+local-audit-registry/
+local-audit-reports/
+audit-output/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.env
