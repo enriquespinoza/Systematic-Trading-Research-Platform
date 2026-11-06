@@ -44,3 +44,11 @@ The collector is **not yet scheduled**. It must execute on a persistent, authent
 - No GitHub APIs are invoked by local ingestion; optional collection requires a separately approved `gh` authentication context.
 - CI checks run on synthetic fixtures, not live market data or predictive-performance claims. Research acceptance remains **NOT_ESTABLISHED**, independent review **NOT_PERFORMED**, broker submission **false**.
 - GitHub-hosted evidence expires on a retention schedule, and the registry does not imply continuous AI agent execution.
+
+## Execution Engine compatibility boundary (2026-11-06)
+
+The first Execution Engine `main` CI artifacts used the prefix `offline-audit-...`, did not record the engine identifier, and did not enforce network blocking. **They are not valid `research-ci-audit-v1` registry inputs**. Historical evidence is not rewritten or silently promoted.
+
+The Execution Engine migration PR switches CI to the same pinned shared runner used by Scanner and TMF, enforces pytest-socket isolation and publishes `trading-execution-audit-...`. The central registry's `collector_min_run_id=42314496329` for trading-execution skips known pre-contract main runs, including `42314496328`. Earlier artifact ZIPs remain accessible via GitHub until retention expiry but are excluded from registry-supported evidence. An explicit optional `artifact_prefix` setting supports already-validated alternate naming conventions; it does not waive required evidence fields or bypass identity verification.
+
+Collector and schedule monitors remain disabled pending execution CI validation and provisioning of a persistent read-only collection host and protected backup storage.
