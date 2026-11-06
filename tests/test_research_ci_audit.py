@@ -1,6 +1,7 @@
 """Pure contract checks for the shared CI audit reporter."""
 import tempfile
 import unittest
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 from scripts.research_ci_audit import parse_junit, sha256_file
@@ -29,7 +30,7 @@ class AuditContractTests(unittest.TestCase):
             for payload in payloads:
                 with self.subTest(payload=payload):
                     report.write_text(payload)
-                    with self.assertRaises((ValueError, KeyError, TypeError, Exception)) as context:
+                    with self.assertRaises((ValueError, KeyError, TypeError, ET.ParseError)) as context:
                         parse_junit(report)
                     self.assertIsNotNone(context.exception)
 
