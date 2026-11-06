@@ -1,0 +1,56 @@
+{
+  "schema_version": "orchestrator-audit-registry-v1",
+  "engines": [
+    {
+      "engine_id": "stock-scanner",
+      "repository": "enriquespinoza/Thinkorswim-Stock-Scanner-Engine",
+      "monitor_enabled": false,
+      "collector_enabled": false,
+      "workflow_file": "research-ci-audit.yml",
+      "schedule_hhmm_utc": "10:17",
+      "weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "grace_minutes": 180,
+      "active_from_utc": "2026-11-06T00:00:00Z"
+    },
+    {
+      "engine_id": "tmf-predictive-analytics",
+      "repository": "enriquespinoza/TMF-Intraday-Predictive-Analytics",
+      "monitor_enabled": false,
+      "collector_enabled": false,
+      "workflow_file": "research-ci-audit.yml",
+      "schedule_hhmm_utc": "10:37",
+      "weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "grace_minutes": 180,
+      "active_from_utc": "2026-11-06T00:00:00Z"
+    },
+    {
+      "engine_id": "trading-execution",
+      "repository": "enriquespinoza/Trading-Execution-Engine",
+      "monitor_enabled": false,
+      "collector_enabled": false,
+      "workflow_file": "ci-audit.yml",
+      "schedule_hhmm_utc": "09:17",
+      "weekdays": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "grace_minutes": 180,
+      "active_from_utc": "2026-11-06T00:00:00Z"
+    }
+  ]
+}
