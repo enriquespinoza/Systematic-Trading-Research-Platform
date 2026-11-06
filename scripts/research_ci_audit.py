@@ -71,6 +71,7 @@ def main() -> int:
     parser.add_argument("--repo-root", type=Path, default=Path("."))
     parser.add_argument("--output-dir", type=Path, default=Path("audit-output"))
     parser.add_argument("--engine-id", required=True)
+    parser.add_argument("--offline", action="store_true", help="Use pytest-socket to block network access")
     parser.add_argument("--timeout-seconds", type=int, default=1200)
     args = parser.parse_args()
     if args.timeout_seconds < 1 or not re.fullmatch(r"[a-z][a-z0-9-]{1,63}", args.engine_id):
@@ -87,10 +88,13 @@ def main() -> int:
     problems: list[str] = []
     started = time.monotonic()
     exit_code = 1
+    pytest_args = [sys.executable, "-m", "pytest", "-q", "tests", f"--junitxml={junit}"]
+    if args.offline:
+        pytest_args.append("--disable-socket")
     with log_file.open("w", encoding="utf-8") as log:
         try:
             result = subprocess.run(
-                [sys.executable, "-m", "pytest", "-q", "tests", f"--junitxml={junit}"],
+                pytest_args,
                 cwd=repo, stdout=log, stderr=subprocess.STDOUT,
                 timeout=args.timeout_seconds, check=False,
             )
@@ -138,6 +142,7 @@ def main() -> int:
             "platform": platform.platform(),
         },
         "test_exit_code": exit_code,
+        "network_disabled": args.offline,
         "test_counts": counts,
         "elapsed_seconds": round(time.monotonic() - started, 3),
         "problems": problems,
