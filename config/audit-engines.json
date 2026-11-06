@@ -50,7 +50,8 @@
         4
       ],
       "grace_minutes": 180,
-      "active_from_utc": "2026-11-06T00:00:00Z"
+      "active_from_utc": "2026-11-06T00:00:00Z",
+      "collector_min_run_id": 42314496329
     }
   ]
 }

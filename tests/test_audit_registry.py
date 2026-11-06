@@ -206,6 +206,62 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(collect(self.database, self.config, api=api, download=download)[0]["result"], "imported")
         self.assertEqual(collect(self.database, self.config, api=api, download=download)[0]["result"], "duplicate")
 
+    def test_collector_skips_explicit_precontract_runs(self):
+        self.cfg["engines"][0]["collector_enabled"] = True
+        self.cfg["engines"][0]["collector_min_run_id"] = 101
+        self.save_config()
+        requests = []
+
+        def api(endpoint, _):
+            requests.append(endpoint)
+            if "/runs?branch=main" in endpoint:
+                return {"workflow_runs": [{
+                    "id": 100, "head_sha": "a" * 40,
+                    "status": "completed", "head_branch": "main",
+                    "created_at": "2026-11-06T23:00:00Z",
+                }]}
+            raise AssertionError("Legacy artifacts must not be queried")
+
+        self.assertEqual(collect(self.database, self.config, api=api), [])
+        self.assertEqual(len(requests), 1)
+
+    def test_reject_invalid_collection_boundary_or_alias(self):
+        for key, value in [
+            ("collector_min_run_id", -1),
+            ("collector_min_run_id", True),
+            ("artifact_prefix", "../unsafe"),
+        ]:
+            with self.subTest(key=key, value=value):
+                self.cfg["engines"][0][key] = value
+                with self.assertRaises(EvidenceError):
+                    self.save_config()
+                del self.cfg["engines"][0][key]
+
+    def test_collector_supports_valid_legacy_artifact_name(self):
+        self.cfg["engines"][0]["collector_enabled"] = True
+        self.cfg["engines"][0]["artifact_prefix"] = "offline-audit"
+        self.save_config()
+        source = self.artifact()
+
+        def api(endpoint, _):
+            if "/runs?branch=main" in endpoint:
+                return {"workflow_runs": [{
+                    "id": 100, "head_sha": "a" * 40,
+                    "status": "completed", "head_branch": "main",
+                    "created_at": "2026-11-06T23:00:00Z",
+                }]}
+            return {"artifacts": [{
+                "id": 9, "name": "offline-audit-100-1",
+                "expired": False,
+            }]}
+
+        def download(repo, run_id, name, path, gh):
+            self.assertEqual(name, "offline-audit-100-1")
+            path.write_bytes(source.read_bytes())
+
+        result = collect(self.database, self.config, api=api, download=download)
+        self.assertEqual(result[0]["result"], "imported")
+
     def test_malformed_junit(self):
         with self.assertRaises(EvidenceError):
             parse_junit(b"<broken")

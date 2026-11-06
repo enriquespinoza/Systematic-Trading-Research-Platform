@@ -65,6 +65,13 @@ def load_config(path: Path) -> dict[str, dict[str, Any]]:
             raise EvidenceError("Invalid or duplicated engine ID")
         if not isinstance(repository, str) or not re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", repository):
             raise EvidenceError("Invalid repository mapping")
+        if "artifact_prefix" in item:
+            prefix = item["artifact_prefix"]
+            if not isinstance(prefix, str) or not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*-audit", prefix):
+                raise EvidenceError("Invalid audit artifact prefix")
+        min_run_id = item.get("collector_min_run_id", 0)
+        if type(min_run_id) is not int or min_run_id < 0:
+            raise EvidenceError("collector_min_run_id must be a nonnegative integer")
         if type(item.get("monitor_enabled")) is not bool:
             raise EvidenceError("monitor_enabled must be boolean")
         if "collector_enabled" in item and type(item["collector_enabled"]) is not bool:

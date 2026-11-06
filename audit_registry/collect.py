@@ -99,6 +99,8 @@ def collect(
             raise EvidenceError("Missing workflow runs list")
         for run in sorted(runs, key=lambda r: (r.get("created_at") or "", r.get("id") or 0)):
             run_id = run.get("id")
+            if type(run_id) is int and run_id < specification.get("collector_min_run_id", 0):
+                continue
             commit = run.get("head_sha")
             if type(run_id) is not int or not isinstance(commit, str) or not re.fullmatch(r"[0-9a-f]{40}", commit):
                 raise EvidenceError("Malformed GitHub run identity")
@@ -107,7 +109,8 @@ def collect(
             artifacts = api(f"repos/{repo}/actions/runs/{run_id}/artifacts?per_page=100", gh_bin).get("artifacts")
             if not isinstance(artifacts, list):
                 raise EvidenceError("Missing GitHub artifact list")
-            expected_prefix = f"{engine}-audit-{run_id}-"
+            artifact_stem = specification.get("artifact_prefix", f"{engine}-audit")
+            expected_prefix = f"{artifact_stem}-{run_id}-"
             matched = [
                 a for a in artifacts
                 if isinstance(a.get("name"), str)
