@@ -1,0 +1,24 @@
+name: Shared audit contract CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contract-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate centralized audit report contract
+        run: python -m unittest discover -s tests -v
+      - name: Compile audit runner
+        run: python -m py_compile scripts/research_ci_audit.py
