@@ -13,7 +13,8 @@ The runner executes the local pytest test suite, fails closed on process errors,
 
 For local use after installing pytest and existing dependencies:
 
-    python scripts/research_ci_audit.py --repo-root . --output-dir audit-output --engine-id scanner
+    python -m pip install pytest-socket
+    python scripts/research_ci_audit.py --repo-root . --output-dir audit-output --engine-id scanner --offline
 
 Use `--engine-id tmf-predictive-analytics` for TMF. Missing baseline reference data or provider credentials must not silently cause a PASS in a test that purports to verify those resources: keep such research gates separately marked NOT_ESTABLISHED.
 
