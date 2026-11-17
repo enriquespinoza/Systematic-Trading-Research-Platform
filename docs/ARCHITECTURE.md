@@ -18,3 +18,8 @@ Git submodules may pin approved source commits later. Until integration contract
 
 ## Evidence
 Each run should report observation counts, newest observation age, matured forecasts, Brier/log loss or CRPS when applicable, benchmark comparisons, calibration, risk metrics, and exceptions. An increase in data volume alone does not establish predictive advantage.
+
+## Phase 0 integration contract
+
+The standardized, research-only run envelope and immutable artifact manifest are specified in [Integration Contracts v1](INTEGRATION_CONTRACTS_V1.md). `integration_contracts` verifies actual manifest/artifact byte hashes, producer identity against the eight-engine registry, timestamp ordering, horizon units and fail-closed safety fields. These checks establish software evidence consistency only. Source authenticity, domain-specific model validation, pinned cross-repository adapters, research-data accumulation and real paper execution remain separate future gates.
+

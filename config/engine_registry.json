@@ -71,6 +71,16 @@
       "paper_validation": "not_verified",
       "approved_release": null,
       "approved_commit": null
+    },
+    {
+      "id": "review",
+      "repository": "enriquespinoza/Decision-Review-Engine",
+      "role": "independent_decision_review",
+      "lifecycle": "experimental",
+      "integration": "not_verified",
+      "paper_validation": "not_verified",
+      "approved_release": null,
+      "approved_commit": null
     }
   ]
 }
