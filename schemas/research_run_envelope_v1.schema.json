@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Research Run Envelope v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_id",
+    "engine_id",
+    "source_repository",
+    "source_commit",
+    "data_as_of_utc",
+    "available_at_utc",
+    "generated_at_utc",
+    "subject",
+    "artifact_type",
+    "horizon",
+    "manifest_sha256",
+    "research_acceptance",
+    "broker_submission_permitted"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "research-run-envelope-v1"
+    },
+    "run_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "engine_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "source_repository": {
+      "type": "string",
+      "pattern": "^enriquespinoza/[^/]+$"
+    },
+    "source_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "data_as_of_utc": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T.*Z$"
+    },
+    "available_at_utc": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T.*Z$"
+    },
+    "generated_at_utc": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T.*Z$"
+    },
+    "subject": {
+      "type": "object",
+      "required": [
+        "kind",
+        "id"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "asset",
+            "universe",
+            "portfolio",
+            "system"
+          ]
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+        }
+      }
+    },
+    "artifact_type": {
+      "enum": [
+        "candidate",
+        "descriptive",
+        "forecast",
+        "allocation",
+        "execution",
+        "review",
+        "audit"
+      ]
+    },
+    "horizon": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "required": [
+            "value",
+            "unit",
+            "calendar"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "unit": {
+              "enum": [
+                "minutes",
+                "trading_sessions",
+                "calendar_days"
+              ]
+            },
+            "calendar": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+            }
+          }
+        }
+      ]
+    },
+    "manifest_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "research_acceptance": {
+      "const": "NOT_ESTABLISHED"
+    },
+    "broker_submission_permitted": {
+      "const": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "artifact_type": {
+            "const": "forecast"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "horizon": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  ]
+}

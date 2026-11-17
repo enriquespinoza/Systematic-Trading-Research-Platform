@@ -1,0 +1,26 @@
+name: Phase 0 integration contract checks
+on:
+  push:
+    paths:
+      - 'config/engine_registry.json'
+      - 'schemas/**'
+      - 'integration_contracts/**'
+      - 'tests/test_integration_contracts.py'
+      - 'scripts/validate_registry.py'
+      - '.github/workflows/integration-contracts.yml'
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate unapproved engine registry
+        run: python scripts/validate_registry.py
+      - name: Verify versioned envelope and artifact contract
+        run: python -m unittest discover -s tests -p 'test_integration_contracts.py' -v
