@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0.0",
+  "policy": "research_only_no_live_orders",
+  "engines": [
+    {
+      "id": "scanner",
+      "repository": "enriquespinoza/Thinkorswim-Stock-Scanner-Engine",
+      "role": "candidate_generation",
+      "lifecycle": "experimental",
+      "integration": "not_verified",
+      "paper_validation": "not_verified",
+      "approved_release": null,
+      "approved_commit": null
+    },
+    {
+      "id": "optimizer",
+      "repository": "enriquespinoza/Thinkorswim-Portfolio-Optimization-Engine",
+      "role": "allocation",
+      "lifecycle": "experimental",
+      "integration": "not_verified",
+      "paper_validation": "not_verified",
+      "approved_release": null,
+      "approved_commit": null
+    },
+    {
+      "id": "execution",
+      "repository": "enriquespinoza/Trading-Execution-Engine",
+      "role": "simulated_execution",
+      "lifecycle": "experimental",
+      "integration": "not_verified",
+      "paper_validation": "not_verified",
+      "approved_release": null,
+      "approved_commit": null
+    },
+    {
+      "id": "tmf",
+      "repository": "enriquespinoza/TMF-Intraday-Predictive-Analytics",
+      "role": "asset_specific_forecasting",
+      "lifecycle": "experimental",
+      "integration": "not_verified",
+      "paper_validation": "not_verified",
+      "approved_release": null,
+      "approved_commit": null
+    },
+    {
+      "id": "fundamental",
+      "repository": "enriquespinoza/Stock-Fundamental-Forecast-Engine",
+      "role": "fundamental_research",
+      "lifecycle": "experimental",
+      "integration": "not_verified",
+      "paper_validation": "not_verified",
+      "approved_release": null,
+      "approved_commit": null
+    },
+    {
+      "id": "technical",
+      "repository": "enriquespinoza/Stock-Technical-Analysis-Engine",
+      "role": "technical_research",
+      "lifecycle": "experimental",
+      "integration": "not_verified",
+      "paper_validation": "not_verified",
+      "approved_release": null,
+      "approved_commit": null
+    },
+    {
+      "id": "ensemble",
+      "repository": "enriquespinoza/Regime-Adaptive-Ensemble-Engine",
+      "role": "regime_research",
+      "lifecycle": "experimental",
+      "integration": "not_verified",
+      "paper_validation": "not_verified",
+      "approved_release": null,
+      "approved_commit": null
+    }
+  ]
+}
